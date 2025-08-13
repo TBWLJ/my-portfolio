@@ -1,155 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Transparent Fading Navbar</title>
-  <!-- Bootstrap 5 -->
+  <title>Portfolio — Dark Hero</title>
+  <meta name="color-scheme" content="dark" />
+  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
-    :root {
-      /* tweak these to taste */
-      --nav-stroke: rgba(255,255,255,0.9);
-      --nav-fill: rgba(255,255,255,0.98);
-      --fade-alpha: 0.08;        /* base translucency */
-      --fade-alpha-scrolled: 0.22; /* on-scroll translucency */
-    }
-
-    body { background:#0e0e10; min-height:200vh; }
-
-    /* NAVBAR WRAPPER */
-    .navbar-custom {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1030;
-      background: transparent; /* start fully transparent */
-      backdrop-filter: saturate(160%) blur(14px);
-      -webkit-backdrop-filter: saturate(160%) blur(14px);
-      transition: box-shadow .35s ease, background-color .35s ease, padding .25s ease;
-    }
-
-    /* subtle gradient fade across the bar (gradually translucent menu area) */
-    .navbar-custom::before {
-      content: "";
-      position: absolute; inset: 0;
-      background: linear-gradient(90deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,var(--fade-alpha)) 18%,
-        rgba(255,255,255,var(--fade-alpha)) 82%,
-        rgba(255,255,255,0) 100%);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    /* when scrolled, increase translucency for readability */
-    .navbar-custom.scrolled::before {
-      background: linear-gradient(90deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,var(--fade-alpha-scrolled)) 18%,
-        rgba(255,255,255,var(--fade-alpha-scrolled)) 82%,
-        rgba(255,255,255,0) 100%);
-    }
-
-    .navbar-custom.scrolled {
-      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
-    }
-
-    /* BRAND */
-    .navbar-brand { color: var(--nav-fill); letter-spacing: .5px; font-weight: 700; }
-    .navbar-brand:focus, .navbar-brand:hover { color: var(--nav-fill); opacity: .9; }
-
-    /* HOLLOW (OUTLINE) NAV LINKS */
-    .navbar-custom .nav-link {
-      color: transparent !important; /* hollow */
-      -webkit-text-stroke: 1px var(--nav-stroke);
-      text-transform: uppercase;
-      letter-spacing: .12rem;
-      position: relative;
-      transition: color .25s ease, -webkit-text-stroke .25s ease, opacity .25s ease;
-      padding: .5rem .75rem;
-    }
-
-    /* underline indicator */
-    .navbar-custom .nav-link::after {
-      content: "";
-      position: absolute; left: .5rem; right: .5rem; bottom: .2rem;
-      height: 2px; border-radius: 2px;
-      background: var(--nav-fill);
-      transform: scaleX(0);
-      transform-origin: left;
-      opacity: .0;
-      transition: transform .25s ease, opacity .25s ease;
-    }
-
-    /* HOVER / FOCUS: fill the text, remove the stroke, reveal underline */
-    .navbar-custom .nav-link:hover, .navbar-custom .nav-link:focus {
-      color: var(--nav-fill) !important;
-      -webkit-text-stroke: 0 transparent;
-    }
-    .navbar-custom .nav-link:hover::after, .navbar-custom .nav-link:focus::after {
-      transform: scaleX(1);
-      opacity: .9;
-    }
-
-    /* ACTIVE state (keeps the filled look + underline) */
-    .navbar-custom .nav-link.active {
-      color: var(--nav-fill) !important;
-      -webkit-text-stroke: 0 transparent;
-    }
-    .navbar-custom .nav-link.active::after { transform: scaleX(1); opacity: 1; }
-
-    /* MOBILE: ensure good spacing */
-    @media (max-width: 991.98px) {
-      .navbar-custom .navbar-collapse { background: rgba(0,0,0,0.25); border-radius: 1rem; padding: .5rem; }
-      .navbar-custom .nav-link { padding: .6rem .9rem; letter-spacing: .1rem; }
-      .navbar-custom .nav-link::after { left: .9rem; right: .9rem; bottom: .35rem; }
-    }
-
-    /* Fallback for browsers without text-stroke support */
-    @supports not (-webkit-text-stroke: 1px white) {
-      .navbar-custom .nav-link { color: rgba(255,255,255,.85) !important; }
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#content">Skip to content</a>
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-    <div class="container">
-      <a class="navbar-brand" href="#home">Ayomide</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="nav">
-        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-          <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
-          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+  <!-- Floating menu button (opens offcanvas) -->
+  <button class="menu-fab" type="button" data-bs-toggle="offcanvas" data-bs-target="#siteMenu" aria-controls="siteMenu" aria-label="Open site menu">
+    <i class="bi bi-list fs-3"></i>
+  </button>
+
+  <!-- Offcanvas menu -->
+  <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="siteMenu" aria-labelledby="siteMenuLabel" data-bs-theme="dark">
+    <div class="offcanvas-header border-bottom border-secondary-subtle">
+      <h5 class="offcanvas-title" id="siteMenuLabel">Menu</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <nav aria-label="Primary">
+        <ul class="list-unstyled d-grid gap-3 fs-5">
+          <li><a class="link-light link-underline-opacity-0" href="#content">About</a></li>
+          <li><a class="link-light link-underline-opacity-0" href="#services">What I Do</a></li>
+          <li><a class="link-light link-underline-opacity-0" href="#contact">Contact</a></li>
         </ul>
+      </nav>
+      <div class="mt-4 small text-muted">© <span id="year"></span> Taiwo Ayomide</div>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="container">
+      <div class="row g-4 align-items-start align-items-lg-center">
+        <!-- Left: profile + socials -->
+        <div class="col-md-4 col-lg-3">
+          <div class="profile-wrap">
+            <img class="profile-img" src="./images/port.png" alt="Portrait of the site owner" loading="lazy" />
+          </div>
+          <!-- Social pills -->
+          <div class="social-pills d-flex flex-wrap gap-2 mt-3">
+            <a class="pill" href="#" aria-label="Facebook">Fb.</a>
+            <a class="pill" href="#" aria-label="Twitter / X">Tw.</a>
+            <a class="pill" href="#" aria-label="Instagram">Ins.</a>
+            <a class="pill" href="#" aria-label="Dribbble">Drb.</a>
+          </div>
+        </div>
+
+        <!-- Right: intro text -->
+        <div class="col-md-8 col-lg-9">
+          <div class="hello-pill mb-2" aria-label="Greeting">
+            <span class="dot" aria-hidden="true"></span>
+            <span>Hello Everyone <span aria-hidden="true">👋</span></span>
+          </div>
+
+          <h1 class="mb-1">I'm <span class="accent">Taiwo Ayomide</span></h1>
+          <p class="leadline mb-2">I am a <span id="typed" aria-live="polite">Software Developer</span><span id="caret" aria-hidden="true">|</span></p>
+
+          <hr class="my-3 soft-border" />
+
+          <!-- Information row (DOB, phone/WhatsApp, email, location) -->
+          <ul class="info-row list-unstyled d-flex flex-wrap align-items-center gap-3 small mb-3">
+            <li class="d-flex align-items-center"><i class="bi bi-calendar3"></i> <span>14.03.2003</span></li>
+            <li class="d-flex align-items-center"><i class="bi bi-whatsapp"></i> <a class="link-light link-underline-opacity-0" href="https://wa.me/1987654321">+234 814-124-2512</a></li>
+            <li class="d-flex align-items-center"><i class="bi bi-envelope"></i> <a class="link-light link-underline-opacity-0" href="mailto:example@email.com">taiwoayomide202@email.com</a></li>
+            <li class="d-flex align-items-center"><i class="bi bi-geo-alt"></i> <span>Lagos, Nigeria</span></li>
+          </ul>
+
+          <!-- About text -->
+          <p class="text-muted-80 mb-0">
+            I'm a Creative Developer for interactive projects that usually are apps, VR, and creative websites. I spend most of my time coding outstanding projects or studying new technologies to improve my development stack. I develop compelling designs that spring to life using transition and animations that suit my clients, using the most sophisticated technologies available today for fully interactive and responsive websites and apps.
+          </p>
+        </div>
       </div>
     </div>
-  </nav>
+  </header>
 
-    <!-- CONTENT -->
-    <header class="d-flex pt-5" style="height: 100vh; color: white;">
-        <div class="pt-4 ms-5">
-            <h1 class="fs-6">Hello Everyone 👋 </h1>
+  <!-- ===== WHAT I DO ===== -->
+  <main id="content">
+    <section id="services" class="py-5">
+      <div class="container">
+        <h2 class="section-title">What I do <span class="bar"></span></h2>
+
+        <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-lg-3">
+          <!-- Card 1 -->
+          <div class="col">
+            <article class="service-card h-100">
+              <div class="service-icon"><i class="bi bi-window"></i></div>
+              <h3 class="service-title">Web Sites and Platforms</h3>
+              <p class="service-text">Modern, accessible websites and full-stack platforms built with performance and SEO in mind.</p>
+            </article>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="col">
+            <article class="service-card h-100">
+              <div class="service-icon"><i class="bi bi-phone"></i></div>
+              <h3 class="service-title">Mobile Applications</h3>
+              <p class="service-text">Cross‑platform mobile apps with smooth UX and native‑like performance.</p>
+            </article>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="col">
+            <article class="service-card h-100">
+              <div class="service-icon"><i class="bi bi-bezier2"></i></div>
+              <h3 class="service-title">Strategy and Branding</h3>
+              <p class="service-text">Clear brand direction, design systems, and content strategy for consistent messaging.</p>
+            </article>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="col">
+            <article class="service-card h-100">
+              <div class="service-icon"><i class="bi bi-camera"></i></div>
+              <h3 class="service-title">Product Photography</h3>
+              <p class="service-text">Clean product imagery and art direction that elevates your storefront.</p>
+            </article>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="col">
+            <article class="service-card h-100">
+              <div class="service-icon"><i class="bi bi-graph-up"></i></div>
+              <h3 class="service-title">SEO Optimization</h3>
+              <p class="service-text">Technical audits, Core Web Vitals, and content tactics to rank and convert.</p>
+            </article>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="col">
+            <article class="service-card h-100">
+              <div class="service-icon"><i class="bi bi-share"></i></div>
+              <h3 class="service-title">Social Media Management</h3>
+              <p class="service-text">Planning, creation, and analytics to grow a loyal audience across channels.</p>
+            </article>
+          </div>
         </div>
-    </header>
+      </div>
+    </section>
+  </main>
 
-  <!-- Bootstrap JS -->
+  <!-- ===== FOOTER ===== -->
+  <footer id="contact" class="py-4 text-center small">
+    <div class="container">
+      <p class="mb-1">Want to work together? <a class="link-light" href="mailto:example@email.com">example@email.com</a></p>
+      <p class="mb-0">© <span id="year-2"></span> David Fincher — All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap Bundle (Popper included) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Year auto-fill -->
   <script>
-    // Increase translucency once the user scrolls a bit
-    const nav = document.querySelector('.navbar-custom');
-    const setScrolled = () => {
-      if (window.scrollY > 24) nav.classList.add('scrolled');
-      else nav.classList.remove('scrolled');
-    };
-    setScrolled();
-    window.addEventListener('scroll', setScrolled, { passive: true });
+    const y = new Date().getFullYear();
+    document.getElementById('year').textContent = y;
+    document.getElementById('year-2').textContent = y;
+  </script>
+
+  <!-- Minimal, dependency-free typewriter effect -->
+  <script>
+    // Edit these words to match your roles/titles.
+    const titles = [
+      'Software Developer',
+      'Speaker',
+      'Mentor',
+    ];
+
+    const typedEl = document.getElementById('typed');
+    let i = 0;   // which word
+    let j = 0;   // how many characters shown
+    let del = false; // deleting mode
+
+    function type() {
+      const word = titles[i];
+      if (!del) {
+        j++;
+        typedEl.textContent = word.slice(0, j);
+        if (j === word.length) {
+          del = true;
+          setTimeout(type, 1100); // pause at the end
+          return;
+        }
+      } else {
+        j--;
+        typedEl.textContent = word.slice(0, j);
+        if (j === 0) {
+          del = false;
+          i = (i + 1) % titles.length;
+        }
+      }
+      const speed = del ? 60 : 110; // typing speeds
+      setTimeout(type, speed);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      type();
+    });
   </script>
 </body>
 </html>
